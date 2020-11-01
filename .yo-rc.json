@@ -1,0 +1,38 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "fr.dla.chat"
+    },
+    "jhipsterVersion": "6.10.1",
+    "applicationType": "microservice",
+    "baseName": "chat",
+    "packageName": "fr.dla.chat",
+    "packageFolder": "fr/dla/chat",
+    "serverPort": "8081",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "YWViNzM0NWZhZjUzM2Y2MTA1MjVhNzI2YzdhZGVhMmMzNzVjM2IzNTljODI4YjIzZGE4NGZmNjYyZjE5YzcyNWZkZDFiYjJhMjQ2NjQyZDAwNjQzZGI0NmUyOGVkNjdlYzk4MmY2MzA0NzgwMDQ2MmRjMTBiYWZhNmQyZDcwMTQ=",
+    "embeddableLaunchScript": false,
+    "creationTimestamp": 1604252705691,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": false,
+    "clientPackageManager": "npm",
+    "blueprints": [],
+    "skipClient": true,
+    "skipUserManagement": true
+  }
+}

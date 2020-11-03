@@ -4,12 +4,14 @@ services:
     image: chat
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=prod,swagger
+      - SPRING_PROFILES_ACTIVE=prod,swagger, no-liquibase
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - SPRING_ACTIVEMQ_BROKERURL=chat-activemq
       - SPRING_DATASOURCE_URL=jdbc:mysql://chat-mysql:3306/chat?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+      - JHIPSTER_SLEEP=10 # gives time for other services to boot before the application
     ports:
       - 8081:8081
+
   chat-mysql:
     image: mysql:8.0.20
     # volumes:
@@ -21,7 +23,8 @@ services:
     ports:
       - 3306:3306
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
-  activemq:
+
+  chat-activemq:
     image: webcenter/activemq:5.14.3
     ports:
       # mqtt
@@ -47,7 +50,6 @@ services:
       ACTIVEMQ_JMX_LOGIN: jmx
       ACTIVEMQ_JMX_PASSWORD: password
       ACTIVEMQ_STATIC_TOPICS: public
-      ACTIVEMQ_STATIC_QUEUES: static-queue-1;static-queue-2
       ACTIVEMQ_ENABLED_SCHEDULER: "true"
       ACTIVEMQ_MIN_MEMORY: 512
       ACTIVEMQ_MAX_MEMORY: 2048

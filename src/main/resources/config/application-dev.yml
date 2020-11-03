@@ -70,6 +70,8 @@ spring:
     locator:
       discovery:
         enabled: true
+  activemq:
+    broker-url: localhost
 
 server:
   port: 8081
@@ -127,4 +129,6 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  activemq:
+    broker-url: localhost

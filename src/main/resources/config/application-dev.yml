@@ -45,7 +45,7 @@ spring:
       auto-commit: false
   h2:
     console:
-      enabled: false
+      enabled: true
   jpa:
     database-platform: io.github.jhipster.domain.util.FixedH2Dialect
     show-sql: true
@@ -72,6 +72,10 @@ spring:
         enabled: true
   activemq:
     broker-url: localhost
+    port: 61613
+    user: admin
+    password: password
+
 
 server:
   port: 8081

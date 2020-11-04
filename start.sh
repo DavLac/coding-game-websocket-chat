@@ -11,7 +11,8 @@ docker-compose -p container -f docker-compose.yml up -d
 read -n 1 -s -r -p "
 ----------------------------------------------------------
 Application 'Chat app' is running! Access URLs:
-Local : 		http://localhost:8081/
+Local 1 : 		http://localhost:8081/
+Local 2 : 		http://localhost:8082/
 ----------------------------------------------------------
 
 Please wait 10 sec application is starting. Press any keys to continue...

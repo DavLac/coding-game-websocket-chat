@@ -14,6 +14,15 @@ public class WebSocketChatConfig implements WebSocketMessageBrokerConfigurer {
     @Value("${spring.activemq.broker-url}")
     private String activeMqUrl;
 
+    @Value("${spring.activemq.port}")
+    private Integer activeMqPort;
+
+    @Value("${spring.activemq.user}")
+    private String activeMqUser;
+
+    @Value("${spring.activemq.password}")
+    private String activeMqPassword;
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/websocketApp").withSockJS();
@@ -24,8 +33,8 @@ public class WebSocketChatConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/app");
         registry.enableStompBrokerRelay("/topic")
             .setRelayHost(activeMqUrl)
-            .setRelayPort(61613)
-            .setClientLogin("admin")
-            .setClientPasscode("password");
+            .setRelayPort(activeMqPort)
+            .setClientLogin(activeMqUser)
+            .setClientPasscode(activeMqPassword);
     }
 }

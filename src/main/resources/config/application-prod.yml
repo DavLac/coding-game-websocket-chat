@@ -67,6 +67,9 @@ spring:
         enabled: true
   activemq:
     broker-url: localhost
+    port: 61613
+    user: admin
+    password: password
 
 # ===================================================================
 # To enable TLS in production, generate a certificate using:

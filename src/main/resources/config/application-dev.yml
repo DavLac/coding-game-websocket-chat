@@ -38,7 +38,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:h2:file:./target/h2db/db/chat;DB_CLOSE_DELAY=-1
-    username: chat
+    username: admin
     password:
     hikari:
       poolName: Hikari
@@ -130,6 +130,4 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-application:
-  activemq:
-    broker-url: localhost
+# application:

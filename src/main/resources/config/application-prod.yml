@@ -146,6 +146,4 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-application:
-  activemq:
-    broker-url: localhost
+# application:

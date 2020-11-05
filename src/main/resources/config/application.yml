@@ -80,7 +80,7 @@ management:
 
 spring:
   application:
-    name: chat
+    name: action-monitor
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
   profiles:
@@ -154,7 +154,7 @@ info:
 
 jhipster:
   clientApp:
-    name: 'chatApp'
+    name: 'actionMonitorApp'
   # By default CORS is disabled. Uncomment to enable.
   # cors:
   #     allowed-origins: "*"
@@ -167,9 +167,9 @@ jhipster:
     from: chat@localhost
   swagger:
     default-include-pattern: /api/.*
-    title: chat API
-    description: chat API documentation
-    version: 0.0.1
+    title: action-monitor API
+    description: action-monitor API documentation
+    version: 1.0.0
     terms-of-service-url:
     contact-name:
     contact-url:

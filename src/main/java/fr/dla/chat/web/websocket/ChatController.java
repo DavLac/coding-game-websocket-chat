@@ -1,6 +1,6 @@
 package fr.dla.chat.web.websocket;
 
-import fr.dla.chat.domain.ChatMessage;
+import fr.dla.chat.domain.websocket.ChatMessage;
 import fr.dla.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;

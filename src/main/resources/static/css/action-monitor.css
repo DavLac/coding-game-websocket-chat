@@ -5,7 +5,15 @@ h4 {
 
 .logBody {
   font-family: Courier New, serif;
-  background-color: lightgrey;
+  background-color: #e4e4e4;
   padding: 10px;
   margin: 10px;
+}
+
+.wsConnexion {
+  color: green;
+}
+
+.wsError {
+  color: red;
 }

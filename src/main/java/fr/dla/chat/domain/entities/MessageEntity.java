@@ -1,4 +1,4 @@
-package fr.dla.chat.domain;
+package fr.dla.chat.domain.entities;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +19,6 @@ import java.time.Instant;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 @Table(name = "Message")
 @Entity
 public class MessageEntity {
@@ -42,5 +41,16 @@ public class MessageEntity {
         this.timestamp = timestamp;
         this.roomId = roomId;
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "MessageEntity{" +
+            "id=" + id +
+            ", content='" + content + '\'' +
+            ", timestamp=" + timestamp +
+            ", roomId='" + roomId + '\'' +
+            ", user=" + user.getId() +
+            '}';
     }
 }

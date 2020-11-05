@@ -1,7 +1,7 @@
 <html>
 <head>
     <title>Action-monitor</title>
-    <link rel="stylesheet" href="/css/action-monitor.css" />
+    <link rel="stylesheet" href="/css/action-monitor.css"/>
     <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
@@ -13,27 +13,27 @@
         var socket = new SockJS('/ws');
         var ws = Stomp.over(socket);
 
-        ws.connect({}, function (frame) {
-            $(".wsConnection").append('<h4>Web socket connection established !</h4>')
-            ws.subscribe("/topic/database-action", function (log) {
+        ws.connect({}, function () {
+            $(".logBody").append('<span class="wsConnexion">Web socket connection established !</span><br/>')
+            ws.subscribe("/topic/database-log", function (log) {
                 console.log(log);
                 append(log);
             });
         }, function (error) {
             console.log("STOMP error " + error);
+            $(".logBody").append('<span class="wsError">STOMP error. Try to reload the page. Error = ' + error + '</span><br/>')
         });
     }
 
     function append(log) {
-        $(".logBody").append('<p>' + log.body + '</p>')
+        $(".logBody").append(log.body + '<br/>')
     }
 
     connectActionMonitor()
 </script>
 <body>
-<div class="wsConnection"></div>
 <div class="logBody">
-    <h4>Database logs</h4>
+    <h4>Action monitoring logs</h4>
 </div>
 </body>
 </html>

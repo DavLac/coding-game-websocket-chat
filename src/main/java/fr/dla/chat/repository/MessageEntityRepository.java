@@ -1,7 +1,7 @@
 package fr.dla.chat.repository;
 
 
-import fr.dla.chat.domain.MessageEntity;
+import fr.dla.chat.domain.entities.MessageEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

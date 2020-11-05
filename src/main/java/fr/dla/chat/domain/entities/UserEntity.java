@@ -1,4 +1,4 @@
-package fr.dla.chat.domain;
+package fr.dla.chat.domain.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +19,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Table(name = "User")
 @Entity
 public class UserEntity {
@@ -34,5 +33,13 @@ public class UserEntity {
 
     public UserEntity(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            '}';
     }
 }

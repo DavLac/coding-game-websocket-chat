@@ -1,4 +1,4 @@
-package fr.dla.chat.domain;
+package fr.dla.chat.domain.websocket;
 
 public class ChatMessage {
 

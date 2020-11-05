@@ -12,7 +12,6 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Optional;
 
 import static java.lang.String.format;
 
@@ -31,12 +30,17 @@ public class ChatService {
 
     //region public methods
     public void sendMessage(String roomId, ChatMessage chatMessage) {
-        createMessage(roomId, chatMessage);
+        MessageEntity messageEntity = createMessage(roomId, chatMessage);
+        messagingTemplate.convertAndSend("/topic/database-action",
+            format("timestamp=%s :: a Message with ID=%d was inserted", Instant.now().toString(), messageEntity.getId()));
         messagingTemplate.convertAndSend(format(TOPIC_FORMAT, roomId), chatMessage);
     }
 
     public void addUser(String roomId, ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
-        createUser(chatMessage.getSender());
+        UserEntity userEntity = createUser(chatMessage.getSender());
+
+        messagingTemplate.convertAndSend("/topic/database-action",
+            format("timestamp=%s :: a User with ID=%d was inserted", Instant.now().toString(), userEntity.getId()));
 
         String currentRoomId = (String) headerAccessor.getSessionAttributes().put(ROOM_ID, roomId);
         if (currentRoomId != null) {
@@ -51,16 +55,15 @@ public class ChatService {
     //endregion public methods
 
     //region private methods
-    private void createUser(String user) {
-        Optional<UserEntity> userEntityOptional = userEntityRepository.findByName(user);
-        if (!userEntityOptional.isPresent()) {
-            userEntityRepository.save(new UserEntity(user));
-        }
+    private UserEntity createUser(String user) {
+        return userEntityRepository.findByName(user)
+            .orElseGet(() -> userEntityRepository.save(new UserEntity(user)));
+
     }
 
-    private void createMessage(String roomId, ChatMessage chatMessage) {
+    private MessageEntity createMessage(String roomId, ChatMessage chatMessage) {
         UserEntity user = userEntityRepository.findByName(chatMessage.getSender()).orElse(null);
-        messageEntityRepository.save(new MessageEntity(chatMessage.getContent(), Instant.now(), roomId, user));
+        return messageEntityRepository.save(new MessageEntity(chatMessage.getContent(), Instant.now(), roomId, user));
     }
     //endregion private methods
 }

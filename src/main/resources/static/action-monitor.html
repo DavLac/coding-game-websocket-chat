@@ -1,0 +1,39 @@
+<html>
+<head>
+    <title>Action-monitor</title>
+    <link rel="stylesheet" href="/css/action-monitor.css" />
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/webjars/js-cookie/js.cookie.js"></script>
+</head>
+
+<script>
+    function connectActionMonitor() {
+        var socket = new SockJS('/ws');
+        var ws = Stomp.over(socket);
+
+        ws.connect({}, function (frame) {
+            $(".wsConnection").append('<h4>Web socket connection established !</h4>')
+            ws.subscribe("/topic/database-action", function (log) {
+                console.log(log);
+                append(log);
+            });
+        }, function (error) {
+            console.log("STOMP error " + error);
+        });
+    }
+
+    function append(log) {
+        $(".logBody").append('<p>' + log.body + '</p>')
+    }
+
+    connectActionMonitor()
+</script>
+<body>
+<div class="wsConnection"></div>
+<div class="logBody">
+    <h4>Database logs</h4>
+</div>
+</body>
+</html>

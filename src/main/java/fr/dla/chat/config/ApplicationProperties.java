@@ -10,25 +10,4 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "application")
 public class ApplicationProperties {
-    private Activemq activemq;
-
-    public static class Activemq {
-        private String brokerUrl;
-
-        public String getBrokerUrl() {
-            return brokerUrl;
-        }
-
-        public void setBrokerUrl(String brokerUrl) {
-            this.brokerUrl = brokerUrl;
-        }
-    }
-
-    public Activemq getActivemq() {
-        return activemq;
-    }
-
-    public void setActivemq(Activemq activemq) {
-        this.activemq = activemq;
-    }
 }

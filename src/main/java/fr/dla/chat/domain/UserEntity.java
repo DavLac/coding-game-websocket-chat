@@ -15,7 +15,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -23,7 +22,7 @@ import java.util.List;
 @ToString
 @Table(name = "User")
 @Entity
-public class User {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -31,9 +30,9 @@ public class User {
     private String name;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<Message> messageEntities;
+    private List<MessageEntity> messageEntities;
 
-    public User(String name) {
+    public UserEntity(String name) {
         this.name = name;
     }
 }

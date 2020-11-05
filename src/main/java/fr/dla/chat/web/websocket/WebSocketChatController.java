@@ -1,39 +1,58 @@
 package fr.dla.chat.web.websocket;
 
-import fr.dla.chat.domain.Message;
-import fr.dla.chat.domain.User;
-import fr.dla.chat.domain.WebSocketChatMessage;
+import fr.dla.chat.domain.ChatMessage;
+import fr.dla.chat.domain.MessageEntity;
+import fr.dla.chat.domain.UserEntity;
 import fr.dla.chat.repository.MessageEntityRepository;
 import fr.dla.chat.repository.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
+
+import java.time.Instant;
+import java.util.Optional;
+
+import static java.lang.String.format;
 
 @RequiredArgsConstructor
 @Controller
 public class WebSocketChatController {
 
+    private static final String TOPIC_FORMAT = "/topic/%s";
+
     private final UserEntityRepository userEntityRepository;
     private final MessageEntityRepository messageEntityRepository;
+    private final SimpMessageSendingOperations messagingTemplate;
 
-    @MessageMapping("/chat.sendMessage")
-    @SendTo("/topic/public")
-    public WebSocketChatMessage sendMessage(@Payload WebSocketChatMessage webSocketChatMessage) throws Exception {
-        User user = userEntityRepository.findByName(webSocketChatMessage.getSender()).orElseThrow(Exception::new);
-        messageEntityRepository.save(new Message(webSocketChatMessage.getContent(), user));
-        return webSocketChatMessage;
+    @MessageMapping("/chat/{roomId}/sendMessage")
+    public void sendMessage(@DestinationVariable String roomId, @Payload ChatMessage chatMessage) throws Exception {
+        UserEntity user = userEntityRepository.findByName(chatMessage.getSender()).orElseThrow(Exception::new);
+        messageEntityRepository.save(new MessageEntity(chatMessage.getContent(), Instant.now(), roomId, user));
+
+        messagingTemplate.convertAndSend(format(TOPIC_FORMAT, roomId), chatMessage);
     }
 
-    @MessageMapping("/chat.newUser")
-    @SendTo("/topic/public")
-    public WebSocketChatMessage newUser(@Payload WebSocketChatMessage webSocketChatMessage,
-                                        SimpMessageHeaderAccessor headerAccessor) {
-        userEntityRepository.findByName(webSocketChatMessage.getSender())
-            .orElse(userEntityRepository.save(new User(webSocketChatMessage.getSender())));
-        headerAccessor.getSessionAttributes().put("username", webSocketChatMessage.getSender());
-        return webSocketChatMessage;
+    @MessageMapping("/chat/{roomId}/addUser")
+    public void addUser(@DestinationVariable String roomId, @Payload ChatMessage chatMessage,
+                        SimpMessageHeaderAccessor headerAccessor) {
+
+        Optional<UserEntity> userEntityOptional =  userEntityRepository.findByName(chatMessage.getSender());
+         if(!userEntityOptional.isPresent()){
+             userEntityRepository.save(new UserEntity(chatMessage.getSender()));
+         }
+
+        String currentRoomId = (String) headerAccessor.getSessionAttributes().put("room_id", roomId);
+        if (currentRoomId != null) {
+            ChatMessage leaveMessage = new ChatMessage();
+            leaveMessage.setType(ChatMessage.MessageType.LEAVE);
+            leaveMessage.setSender(chatMessage.getSender());
+            messagingTemplate.convertAndSend(format(TOPIC_FORMAT, currentRoomId), leaveMessage);
+        }
+        headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
+        messagingTemplate.convertAndSend(format(TOPIC_FORMAT, roomId), chatMessage);
     }
 }

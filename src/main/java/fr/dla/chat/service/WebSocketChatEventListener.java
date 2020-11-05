@@ -1,7 +1,8 @@
 package fr.dla.chat.service;
 
-import fr.dla.chat.domain.WebSocketChatMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import fr.dla.chat.domain.ChatMessage;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
@@ -9,26 +10,34 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import static java.lang.String.format;
+
+@Slf4j
+@RequiredArgsConstructor
 @Component
 public class WebSocketChatEventListener {
 
-    @Autowired
-    private SimpMessageSendingOperations messagingTemplate;
+    private final SimpMessageSendingOperations messagingTemplate;
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-        System.out.println("Received a new web socket connection");
+        log.info("Received a new web socket connection");
     }
 
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+
         String username = (String) headerAccessor.getSessionAttributes().get("username");
+        String roomId = (String) headerAccessor.getSessionAttributes().get("room_id");
         if (username != null) {
-            WebSocketChatMessage chatMessage = new WebSocketChatMessage();
-            chatMessage.setType("Leave");
+            log.info("User Disconnected: " + username);
+
+            ChatMessage chatMessage = new ChatMessage();
+            chatMessage.setType(ChatMessage.MessageType.LEAVE);
             chatMessage.setSender(username);
-            messagingTemplate.convertAndSend("/topic/public", chatMessage);
+
+            messagingTemplate.convertAndSend(format("/topic/%s", roomId), chatMessage);
         }
     }
 }

@@ -1,11 +1,6 @@
 package fr.dla.chat.config;
 
-import fr.dla.chat.security.*;
-import fr.dla.chat.security.jwt.*;
-
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -20,11 +15,9 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @Import(SecurityProblemSupport.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final TokenProvider tokenProvider;
     private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(TokenProvider tokenProvider, SecurityProblemSupport problemSupport) {
-        this.tokenProvider = tokenProvider;
+    public SecurityConfiguration(SecurityProblemSupport problemSupport) {
         this.problemSupport = problemSupport;
     }
     @Override
@@ -44,7 +37,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(problemSupport)
         .and()
             .headers()
-            .contentSecurityPolicy("default-src *; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src 'self' http://netdna.bootstrapcdn.com; img-src 'self' data:; font-src *")
+            .contentSecurityPolicy("default-src *; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src 'self' 'unsafe-inline' http://netdna.bootstrapcdn.com; img-src 'self' data:; font-src *")
         .and()
             .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
         .and()
@@ -61,14 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/info").permitAll()
-            .antMatchers("/management/prometheus").permitAll()
-            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-        .and()
-            .apply(securityConfigurerAdapter());
+            .antMatchers("/management/prometheus").permitAll();
         // @formatter:on
-    }
-
-    private JWTConfigurer securityConfigurerAdapter() {
-        return new JWTConfigurer(tokenProvider);
     }
 }

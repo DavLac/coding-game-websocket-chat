@@ -17,7 +17,6 @@ import java.sql.SQLException;
 
 @Configuration
 @EnableJpaRepositories("fr.dla.chat.repository")
-@EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement
 public class DatabaseConfiguration {
 

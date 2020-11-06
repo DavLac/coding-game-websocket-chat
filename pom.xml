@@ -376,8 +376,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
+                    <source>9</source>
+                    <target>9</target>
                     <encoding>UTF-8</encoding>
                     <annotationProcessorPaths>
                         <path>
@@ -597,6 +597,13 @@
                                 <goal>report</goal>
                             </goals>
                             <configuration>
+                                <excludes>
+                                    <exclude>**/config/*.*</exclude>
+                                    <exclude>**/ChatApp.*</exclude>
+                                    <exclude>**/ApplicationWebXml.*</exclude>
+                                    <exclude>**/error/*.*</exclude>
+                                    <exclude>**/domain/**</exclude>
+                                </excludes>
                                 <dataFile>${jacoco.utReportFile}</dataFile>
                                 <outputDirectory>${jacoco.utReportFolder}</outputDirectory>
                             </configuration>

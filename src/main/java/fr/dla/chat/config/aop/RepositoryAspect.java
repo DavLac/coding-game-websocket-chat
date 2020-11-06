@@ -22,6 +22,7 @@ public class RepositoryAspect {
 
     /**
      * Pointcut that matches save methods in repositories in repository package
+     * Used to send message when a repository save any entity in database
      */
     @After("execution(* fr.dla.chat.repository.*Repository.save(..)) && args(entity)")
     public void logAfterSavingEntity(Object entity) {
